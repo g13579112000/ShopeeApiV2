@@ -1,0 +1,15 @@
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\ShopeeApiV2.exe
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\ShopeeApiV2.deps.json
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\ShopeeApiV2.runtimeconfig.json
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\ShopeeApiV2.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\ShopeeApiV2.pdb
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.csproj.AssemblyReference.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.GeneratedMSBuildEditorConfig.editorconfig
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.AssemblyInfoInputs.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.AssemblyInfo.cs
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.csproj.CoreCompileInputs.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\refint\ShopeeApiV2.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.pdb
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ShopeeApiV2.genruntimeconfig.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ref\ShopeeApiV2.dll

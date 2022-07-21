@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetAuthCode", "ShopeeApiV2\GetAuthCode.csproj", "{DF793232-7B43-4135-B3C8-CD64BC815400}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF793232-7B43-4135-B3C8-CD64BC815400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF793232-7B43-4135-B3C8-CD64BC815400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF793232-7B43-4135-B3C8-CD64BC815400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF793232-7B43-4135-B3C8-CD64BC815400}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {517258B0-A348-43B9-A218-7AE773F58F71}
+	EndGlobalSection
+EndGlobal

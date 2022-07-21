@@ -1,0 +1,15 @@
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\GetAuthCode.exe
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\GetAuthCode.deps.json
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\GetAuthCode.runtimeconfig.json
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\GetAuthCode.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\GetAuthCode.pdb
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.csproj.AssemblyReference.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.GeneratedMSBuildEditorConfig.editorconfig
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.AssemblyInfoInputs.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.AssemblyInfo.cs
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.csproj.CoreCompileInputs.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\refint\GetAuthCode.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.pdb
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.genruntimeconfig.cache
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ref\GetAuthCode.dll
