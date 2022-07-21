@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XmX7LbvhfsMxGywOyj8RxrcE9qJJX2967a9mjNtjobSNJCunw3ZS6UsG2AKcoHcCk0cwiEkBZZn11OFHZHqyVA==",
+  "dgSpecHash": "19KYMdmwn8y1lDX2bjfuT11RVjgl64oiIgw3Q3No8y0WmbYkqLSnKoB3mdMdvdfr4TycByuHwce+BGbQipElxw==",
   "success": true,
   "projectFilePath": "D:\\Test\\ShopeeApiV2\\ShopeeApiV2\\ShopeeApiV2\\GetAuthCode.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\bodera\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

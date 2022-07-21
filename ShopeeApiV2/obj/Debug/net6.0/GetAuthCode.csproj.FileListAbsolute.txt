@@ -13,3 +13,5 @@ D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\refint\GetAuthCode.
 D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.pdb
 D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.genruntimeconfig.cache
 D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\ref\GetAuthCode.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Test\ShopeeApiV2\ShopeeApiV2\ShopeeApiV2\obj\Debug\net6.0\GetAuthCode.csproj.CopyComplete

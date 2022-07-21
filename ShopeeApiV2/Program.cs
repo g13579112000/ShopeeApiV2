@@ -1,6 +1,11 @@
-﻿using System.Security.Cryptography;
+﻿
+using Newtonsoft.Json;
+using System.Collections.Specialized;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
-
+using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 string host = string.Empty;
 bool confirmEnviroment = true;
@@ -29,21 +34,66 @@ var appKey = Console.ReadLine();
 Console.Write("請輸入授權完成後導向網址:");
 var redirectWebsite = Console.ReadLine();
 
-var timestamp = UnixTime(DateTime.UtcNow).ToString();
-var sign = Sign("/api/v2/shop/auth_partner", partner_id!, timestamp, appKey!);
+var timestamp = int.Parse(UnixTime(DateTime.UtcNow).ToString());
+var codeSign = Sign("/api/v2/shop/auth_partner", partner_id!, timestamp.ToString(), appKey!);
+string codeRequestURL = host + $"/api/v2/shop/auth_partner?partner_id={partner_id}&redirect={redirectWebsite}&timestamp={timestamp}&sign={codeSign}";
 
-string requestCommonParameters = $"?partner_id={partner_id}&redirect={redirectWebsite}&timestamp={timestamp}&sign={sign}";
-string requestURL = host + "/api/v2/shop/auth_partner" + requestCommonParameters;
 Console.WriteLine($"授權網址:");
-Console.WriteLine($"{requestURL}" + Environment.NewLine);
-Console.WriteLine("請於3分鐘內登入並授權，授權完畢跳轉頁面後請於5分鐘內將回傳網址交給工程師。");
+Console.WriteLine($"{codeRequestURL}" + Environment.NewLine);
+Console.WriteLine("請於3分鐘內登入並授權，授權完畢跳轉頁面後請於10分鐘內將回傳網址交給工程師。" + Environment.NewLine);
+Console.Write("請輸入回傳網址:");
+var responseUrl = Console.ReadLine();
+var query = GetUrlQuery(responseUrl);
+KeyValuePair<string, string> idInfo;
+timestamp = int.Parse(UnixTime(DateTime.UtcNow).ToString());
 
-Console.ReadLine();
+var request = new AccessTokenRequest
+{
+    code = query["code"],
+    partner_id = int.Parse(partner_id)
+};
 
-static string Sign(string apiPathWithoutHost, string partnerId, string timestamp, string shopeePrivateKey)
+if (query.ContainsKey(IdInfo.ShopId))
+{
+    request.shop_id = int.Parse(query[IdInfo.ShopId]);
+    idInfo = new KeyValuePair<string, string>(IdInfo.ShopId, query[IdInfo.ShopId]);
+}
+else if (query.ContainsKey(IdInfo.MainAccountId))
+{
+    idInfo = new KeyValuePair<string, string>(IdInfo.MainAccountId, query[IdInfo.MainAccountId]);
+}
+else
+{
+    throw new Exception("網址參數不完全");
+}
+var accessTokenSign = Sign("/api/v2/auth/token/get", partner_id!, timestamp.ToString(), appKey!);
+string AccessTokenRequestURL = host + $"/api/v2/auth/token/get?partner_id={partner_id}&timestamp={timestamp}&sign={accessTokenSign}";
+
+//Console.WriteLine("AccessToken請求URL:" + Environment.NewLine + AccessTokenRequestURL + Environment.NewLine);
+
+//var result = GetRemotePage(AccessTokenRequestURL);
+HttpClient _client = new HttpClient();
+var content = new StringContent(JsonConvert.SerializeObject(request),
+                                           null,
+                                           Application.Json);
+var response = await _client.PostAsync(AccessTokenRequestURL, content);
+//var response = Post(AccessTokenRequestURL, JsonSerializer.Serialize(request));
+
+var result = JsonConvert.DeserializeObject<AccessTokenResponse>(response.Content.ReadAsStringAsync().Result)!;
+Console.WriteLine($"AccessToken:{result.access_token}");
+Console.WriteLine($"RefreshToken:{result.refresh_token}");
+
+while (true)
+{
+    Console.ReadLine();
+}
+
+
+
+static string Sign(string apiPathWithoutHost, string partnerId, string timestamp, string shopeePrivateKey, string other = "")
 {
 
-    string signatureBasedString = partnerId + apiPathWithoutHost + timestamp;
+    string signatureBasedString = partnerId + apiPathWithoutHost + timestamp + other;
 
 
     UTF8Encoding encoding = new UTF8Encoding();
@@ -74,4 +124,110 @@ static long UnixTime(DateTime tt)
     long epochTicks = new DateTime(1970, 1, 1).Ticks;
     long unixTime = ((tt.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
     return unixTime;
+}
+static string Post(string uri, string json, Encoding oE = null, NameValueCollection nvHeader = null)
+{
+    if ((oE == null))
+    {
+        oE = Encoding.GetEncoding("utf-8");
+    }
+
+    using (WebClient wc = new WebClient())
+    {
+        //wc.Encoding = oE;
+        wc.Headers.Add("Content-Type", "application/json");
+        if (nvHeader != null)
+        {
+            foreach (string key in nvHeader.AllKeys)
+            {
+                wc.Headers.Add(key, nvHeader[key]);
+            }
+        }
+        return wc.UploadString(uri, "POST", json);
+    }
+}
+
+static string GetRemotePage(string uri, Encoding oE = null, int TimeoutSec = 0)
+{
+    if ((oE == null))
+    {
+        oE = Encoding.GetEncoding("utf-8");
+    }
+
+    var rq = System.Net.WebRequest.Create(uri);
+    rq.Method = "GET";
+    if (TimeoutSec > 0)
+    {
+        rq.Timeout = TimeoutSec * 1000;
+    }
+
+    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+    using (var rp = rq.GetResponse())
+    {
+        using (var sr = new System.IO.StreamReader(rp.GetResponseStream(), oE))
+        {
+            return sr.ReadToEnd();
+        }
+    }
+}
+static Dictionary<string, string> GetUrlQuery(string url)
+{
+    Uri uri = new Uri(url.Trim());
+    string queryString = uri.Query;
+    Dictionary<string, string> result = new Dictionary<string, string>();
+    StringBuilder sb = new StringBuilder();
+    string name = string.Empty;
+    for (int i = 0; i < queryString.Length; i++)
+    {
+        if (queryString[i] == '?')
+        {
+            continue;
+        }
+        else if (queryString[i] == '=')
+        {
+            name = sb.ToString();
+            sb.Clear();
+            continue;
+        }
+        else if (queryString[i] == '&')
+        {
+            result.Add(name, sb.ToString());
+            name = string.Empty;
+            sb.Clear();
+            continue;
+        }
+        else
+        {
+            sb.Append(queryString[i]);
+
+            if (i == queryString.Length - 1)
+            {
+                result.Add(name, sb.ToString());
+            }
+        }
+    }
+    return result;
+}
+
+static class IdInfo
+{
+    public static string ShopId { get { return "shop_id"; } }
+    public static string MainAccountId { get { return "main_account_id"; } }
+}
+
+class AccessTokenRequest
+{
+    public string code { get; set; }
+    public int partner_id { get; set; }
+    public int shop_id { get; set; }
+}
+
+class AccessTokenResponse
+{
+    public string access_token { get; set; }
+    public string refresh_token { get; set; }
+    public string error { get; set; }
+    public string message { get; set; }
 }
