@@ -42,25 +42,34 @@ Console.WriteLine($"授權網址:");
 Console.WriteLine($"{codeRequestURL}" + Environment.NewLine);
 Console.WriteLine("請於3分鐘內登入並授權，授權完畢跳轉頁面後請於10分鐘內將回傳網址交給工程師。" + Environment.NewLine);
 Console.Write("請輸入回傳網址:");
-var responseUrl = Console.ReadLine();
-var query = GetUrlQuery(responseUrl);
+string responseUrl = string.Empty;
+confirmEnviroment = true;
+while (confirmEnviroment)
+{
+    responseUrl = Console.ReadLine()!;
+    if(responseUrl.Length > 0)
+    {
+        confirmEnviroment=false;
+    }
+}
+var query = GetUrlQuery(responseUrl!);
 KeyValuePair<string, string> idInfo;
 timestamp = int.Parse(UnixTime(DateTime.UtcNow).ToString());
 
 var request = new AccessTokenRequest
 {
-    code = query["code"],
-    partner_id = int.Parse(partner_id)
+    code = query[cst.Code],
+    partner_id = int.Parse(partner_id!)
 };
 
-if (query.ContainsKey(IdInfo.ShopId))
+if (query.ContainsKey(cst.ShopId))
 {
-    request.shop_id = int.Parse(query[IdInfo.ShopId]);
-    idInfo = new KeyValuePair<string, string>(IdInfo.ShopId, query[IdInfo.ShopId]);
+    request.shop_id = int.Parse(query[cst.ShopId]);
+    idInfo = new KeyValuePair<string, string>(cst.ShopId, query[cst.ShopId]);
 }
-else if (query.ContainsKey(IdInfo.MainAccountId))
+else if (query.ContainsKey(cst.MainAccountId))
 {
-    idInfo = new KeyValuePair<string, string>(IdInfo.MainAccountId, query[IdInfo.MainAccountId]);
+    idInfo = new KeyValuePair<string, string>(cst.MainAccountId, query[cst.MainAccountId]);
 }
 else
 {
@@ -69,19 +78,23 @@ else
 var accessTokenSign = Sign("/api/v2/auth/token/get", partner_id!, timestamp.ToString(), appKey!);
 string AccessTokenRequestURL = host + $"/api/v2/auth/token/get?partner_id={partner_id}&timestamp={timestamp}&sign={accessTokenSign}";
 
-//Console.WriteLine("AccessToken請求URL:" + Environment.NewLine + AccessTokenRequestURL + Environment.NewLine);
-
-//var result = GetRemotePage(AccessTokenRequestURL);
 HttpClient _client = new HttpClient();
-var content = new StringContent(JsonConvert.SerializeObject(request),
-                                           null,
-                                           Application.Json);
+var content = new StringContent(JsonConvert.SerializeObject(request), null, Application.Json);
 var response = await _client.PostAsync(AccessTokenRequestURL, content);
-//var response = Post(AccessTokenRequestURL, JsonSerializer.Serialize(request));
 
 var result = JsonConvert.DeserializeObject<AccessTokenResponse>(response.Content.ReadAsStringAsync().Result)!;
-Console.WriteLine($"AccessToken:{result.access_token}");
-Console.WriteLine($"RefreshToken:{result.refresh_token}");
+
+if(result.error == String.Empty)
+{
+    Console.WriteLine($"AccessToken:{result.access_token}");
+    Console.WriteLine($"RefreshToken:{result.refresh_token}");
+    Console.WriteLine($"{idInfo.Key}:{idInfo.Value}");
+}
+else
+{
+    Console.WriteLine($"error:{result.error}");
+    Console.WriteLine($"message:{result.message}");
+}
 
 while (true)
 {
@@ -125,53 +138,6 @@ static long UnixTime(DateTime tt)
     long unixTime = ((tt.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
     return unixTime;
 }
-static string Post(string uri, string json, Encoding oE = null, NameValueCollection nvHeader = null)
-{
-    if ((oE == null))
-    {
-        oE = Encoding.GetEncoding("utf-8");
-    }
-
-    using (WebClient wc = new WebClient())
-    {
-        //wc.Encoding = oE;
-        wc.Headers.Add("Content-Type", "application/json");
-        if (nvHeader != null)
-        {
-            foreach (string key in nvHeader.AllKeys)
-            {
-                wc.Headers.Add(key, nvHeader[key]);
-            }
-        }
-        return wc.UploadString(uri, "POST", json);
-    }
-}
-
-static string GetRemotePage(string uri, Encoding oE = null, int TimeoutSec = 0)
-{
-    if ((oE == null))
-    {
-        oE = Encoding.GetEncoding("utf-8");
-    }
-
-    var rq = System.Net.WebRequest.Create(uri);
-    rq.Method = "GET";
-    if (TimeoutSec > 0)
-    {
-        rq.Timeout = TimeoutSec * 1000;
-    }
-
-    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-    using (var rp = rq.GetResponse())
-    {
-        using (var sr = new System.IO.StreamReader(rp.GetResponseStream(), oE))
-        {
-            return sr.ReadToEnd();
-        }
-    }
-}
 static Dictionary<string, string> GetUrlQuery(string url)
 {
     Uri uri = new Uri(url.Trim());
@@ -211,8 +177,9 @@ static Dictionary<string, string> GetUrlQuery(string url)
     return result;
 }
 
-static class IdInfo
+static class cst
 {
+    public static string Code { get { return "code"; } }
     public static string ShopId { get { return "shop_id"; } }
     public static string MainAccountId { get { return "main_account_id"; } }
 }
@@ -221,7 +188,8 @@ class AccessTokenRequest
 {
     public string code { get; set; }
     public int partner_id { get; set; }
-    public int shop_id { get; set; }
+    public int? shop_id { get; set; }
+    public int? main_account_id { get; set; }
 }
 
 class AccessTokenResponse
